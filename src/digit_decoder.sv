@@ -1,4 +1,4 @@
-//  carry_in_rdy ‚ÌŸ‚ÌƒTƒCƒNƒ‹‚Å“à•”ƒJƒEƒ“ƒ^‚ğXV‚µ7seg‚É•\¦‚·‚é
+//  carry_in_rdy ï¿½Ìï¿½ï¿½ÌƒTï¿½Cï¿½Nï¿½ï¿½ï¿½Å“ï¿½ï¿½Jï¿½Eï¿½ï¿½ï¿½^ï¿½ï¿½ï¿½Xï¿½Vï¿½ï¿½7segï¿½É•\ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
 module digit_decoder #(
     parameter           DIGIT_LIMIT = 9
 ) (
@@ -10,12 +10,11 @@ module digit_decoder #(
   , output logic             carry_out_rdy
 );
 
-  logic   [13:0]      clk_counter;
   logic   [ 3:0]      digit;
 
 
-  always_ff @(posedge clk_10K)
-    if(rst_int)
+  always_ff @(posedge clk)
+    if(rst)
       digit <=  'd0;
     else if(carry_in_rdy)
       if(carry_out_rdy)
@@ -26,26 +25,26 @@ module digit_decoder #(
   assign  carry_out_rdy  = digit[0] == DIGIT_LIMIT;
 
 
-  //  7seg•\¦‚ÉƒfƒR[ƒh
+  //  7segï¿½\ï¿½ï¿½ï¿½Éƒfï¿½Rï¿½[ï¿½h
   always_comb
     case(digit)
-      'd0       : hex_display[i] = 'b0000_0000;
-      'd1       : hex_display[i] = 'b0110_0000;
-      'd2       : hex_display[i] = 'b1101_1010;
-      'd3       : hex_display[i] = 'b1111_0010;
-      'd4       : hex_display[i] = 'b0110_0110;
-      'd5       : hex_display[i] = 'b1011_0110;
-      'd6       : hex_display[i] = 'b0011_1110;
-      'd7       : hex_display[i] = 'b1110_0100;
-      'd8       : hex_display[i] = 'b1111_1110;
-      'd9       : hex_display[i] = 'b1110_0110;
-      'd10      :
-      'd11      :
-      'd12      :
-      'd13      :
-      'd14      :
-      'd15      : hex_display[i] = 'b1111_1110;
-      default   : hex_display[i] = 'b1111_1111;
+      'h0       : hex_display = 'b1111_1100;
+      'h1       : hex_display = 'b0110_0000;
+      'h2       : hex_display = 'b1101_1010;
+      'h3       : hex_display = 'b1111_0010;
+      'h4       : hex_display = 'b0110_0110;
+      'h5       : hex_display = 'b1011_0110;
+      'h6       : hex_display = 'b0011_1110;
+      'h7       : hex_display = 'b1110_0100;
+      'h8       : hex_display = 'b1111_1110;
+      'h9       : hex_display = 'b1110_0110;
+      'hA       : hex_display = 'b1110_1110;
+      'hB       : hex_display = 'b0011_1110;
+      'hC       : hex_display = 'b1001_1100;
+      'hD       : hex_display = 'b0111_1010;
+      'hE       : hex_display = 'b1001_1110;
+      'hF       : hex_display = 'b1111_1110;
+      default   : hex_display = 'b1111_1111;
     endcase
 endmodule
 

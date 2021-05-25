@@ -8,18 +8,23 @@ module timer_top (
 
   logic               clk_10K;
   logic               locked;
+  logic               rst_int;
   logic   [ 7:0]      hex_display   [5:0];
-  logic               rap_around_rdy;
+  logic               countup_rdy;
+  logic   [13:0]      clk_counter;
   logic   [ 5:0]      carry_in;
   logic   [ 5:0]      carry_out;
+  logic               timeup;
+  logic   [ 7:0]      counter_1s;
     
 
-  //  60ŠÔˆÈã”‚¦‚½‚çƒGƒ‰[‚Æ‚µ‚ÄLED‚ğ“_“”‚³‚¹‚é
+  //  60ï¿½ï¿½ï¿½ÔˆÈã”ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Gï¿½ï¿½ï¿½[ï¿½Æ‚ï¿½ï¿½ï¿½LEDï¿½ï¿½ï¿½_ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½
   assign  LEDR[0]   = carry_out[5];
+  assign  LEDR[9]   = timeup;
   assign  HEX_7SEG  = hex_display;
 
 
-  ATLPLL	ATLPLL_inst (
+  ALTPLL	ALTPLL_inst (
 	    .inclk0   ( CLK_10M     )
 	  , .c0       ( clk_10K     )
 	  , .locked   ( locked      )
@@ -28,23 +33,29 @@ module timer_top (
   //  reset controll
   assign  rst_int   = ~RST_EXT_N & locked;
 
-  //  0.1ms’PˆÊ‚Å1s‚ğ‚Ş
   always_ff @(posedge clk_10K)
     if(rst_int)
       clk_counter <=  'd0;
-    else if(rap_around)
+    else if(countup_rdy)
       clk_counter <=  'd0;
     else
       clk_counter <=  clk_counter + 'd1;
 
-  assign  rap_around_rdy = clk_counter == 'd9999;
+  assign  countup_rdy = clk_counter == 'd9999;
 
+  always_ff @(posedge clk_10K)
+    if(rst_int)
+      counter_1s  <=  'd0;
+    else if(countup_rdy)
+      counter_1s  <=  counter_1s + 'd1;
 
-  //  •b‚ğ2Œ…•\¦‚É•ÏŠ·
-  assign  carrry_in[0] = rap_around_rdy;
+  assign  timeup = counter_1s == 'd180;
+
+  //  ï¿½bï¿½ï¿½2ï¿½ï¿½ï¿½\ï¿½ï¿½ï¿½É•ÏŠï¿½
+  assign  carry_in[0] = countup_rdy;
   generate
     genvar i;
-    //  59:59:59 ‚Ü‚Å‚ÌƒJƒEƒ“ƒ^‚É‚·‚é
+    //  59:59:59 ï¿½Ü‚Å‚ÌƒJï¿½Eï¿½ï¿½ï¿½^ï¿½É‚ï¿½ï¿½ï¿½
     for(i=0; i<6; i++)  begin : disp_7seg
       if(i%2)
         digit_decoder #(
