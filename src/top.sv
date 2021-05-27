@@ -1,12 +1,13 @@
 module timer_top (
     input   logic             CLK_10M
-  , input   logic             RST_EXT_N
+  , input   logic   [1:0]     KEY
 
   , output  logic   [7:0]     HEX_7SEG  [5:0]
   , output  logic   [9:0]     LEDR
 );
 
   logic               clk_10K;
+  logic               rst_ext_n;
   logic               locked;
   logic               rst_int;
   logic   [ 7:0]      hex_display   [5:0];
@@ -19,19 +20,21 @@ module timer_top (
     
 
   //  60���Ԉȏ㐔�������G���[�Ƃ���LED���_��������
+  assign  rst_ext_n = KEY[0];
   assign  LEDR[0]   = carry_out[5];
+  assign  LEDR[8:1] = 'h0;
   assign  LEDR[9]   = timeup;
   assign  HEX_7SEG  = hex_display;
 
 
-  ALTPLL	ALTPLL_inst (
+  ATLPLL	ALTPLL_inst (
 	    .inclk0   ( CLK_10M     )
 	  , .c0       ( clk_10K     )
 	  , .locked   ( locked      )
 	);
 
   //  reset controll
-  assign  rst_int   = ~RST_EXT_N & locked;
+  assign  rst_int   = ~rst_ext_n & locked;
 
   always_ff @(posedge clk_10K)
     if(rst_int)
