@@ -1,5 +1,5 @@
 module timer_top (
-    input   logic             CLK_10M
+    input   logic             CLK_50M
   , input   logic   [1:0]     KEY
 
   , output  logic   [7:0]     HEX_7SEG  [5:0]
@@ -9,7 +9,7 @@ module timer_top (
   logic               clk_10K;
   logic               rst_ext_n;
   logic               locked;
-  logic               rst_int;
+  logic               pon_rst;
   logic   [ 7:0]      hex_display   [5:0];
   logic               countup_rdy;
   logic   [13:0]      clk_counter;
@@ -20,7 +20,6 @@ module timer_top (
     
 
   //  60���Ԉȏ㐔�������G���[�Ƃ���LED���_��������
-  assign  rst_ext_n = KEY[0];
   assign  LEDR[0]   = carry_out[5];
   assign  LEDR[8:1] = 'h0;
   assign  LEDR[9]   = timeup;
@@ -28,16 +27,16 @@ module timer_top (
 
 
   ATLPLL	ALTPLL_inst (
-	    .inclk0   ( CLK_10M     )
+	    .inclk0   ( CLK_50M     )
 	  , .c0       ( clk_10K     )
 	  , .locked   ( locked      )
 	);
 
   //  reset controll
-  assign  rst_int   = ~rst_ext_n & locked;
+  assign  pon_rst   = locked;
 
   always_ff @(posedge clk_10K)
-    if(rst_int)
+    if(pon_rst)
       clk_counter <=  'd0;
     else if(countup_rdy)
       clk_counter <=  'd0;
@@ -47,7 +46,7 @@ module timer_top (
   assign  countup_rdy = clk_counter == 'd9999;
 
   always_ff @(posedge clk_10K)
-    if(rst_int)
+    if(pon_rst)
       counter_1s  <=  'd0;
     else if(countup_rdy)
       counter_1s  <=  counter_1s + 'd1;
@@ -65,7 +64,7 @@ module timer_top (
             .DIGIT_LIMIT    ( 5 )
         ) sec_digit_decoder (
             .clk            ( clk_10K )
-          , .rst            ( rst_int )
+          , .rst            ( pon_rst )
 
           , .carry_in_rdy   ( carry_in[i] )
           , .hex_display    ( hex_display[i] )
@@ -76,7 +75,7 @@ module timer_top (
             .DIGIT_LIMIT    ( 9 )
         ) sec_digit_decoder (
             .clk            ( clk_10K )
-          , .rst            ( rst_int )
+          , .rst            ( pon_rst )
 
           , .carry_in_rdy   ( carry_in[i] )
           , .hex_display    ( hex_display[i] )
