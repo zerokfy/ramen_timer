@@ -20,7 +20,7 @@
 ## PROGRAM "Quartus Prime"
 ## VERSION "Version 20.1.1 Build 720 11/11/2020 SJ Lite Edition"
 
-## DATE    "Sat May 29 21:56:44 2021"
+## DATE    "Tue Jun 01 23:38:33 2021"
 
 ##
 ## DEVICE  "10M50DAF484C7G"
@@ -59,6 +59,10 @@ create_generated_clock -name {CLK_10K} -source [get_ports {CLK_50M}] -duty_cycle
 # Set Clock Uncertainty
 #**************************************************************
 
+set_clock_uncertainty -rise_from [get_clocks {CLK_10K}] -rise_to [get_clocks {CLK_10K}]  1.000  
+set_clock_uncertainty -rise_from [get_clocks {CLK_10K}] -fall_to [get_clocks {CLK_10K}]  1.000  
+set_clock_uncertainty -fall_from [get_clocks {CLK_10K}] -rise_to [get_clocks {CLK_10K}]  1.000  
+set_clock_uncertainty -fall_from [get_clocks {CLK_10K}] -fall_to [get_clocks {CLK_10K}]  1.000  
 
 
 #**************************************************************
@@ -67,7 +71,7 @@ create_generated_clock -name {CLK_10K} -source [get_ports {CLK_50M}] -duty_cycle
 
 set_input_delay -add_delay  -clock [get_clocks {CLK_10K}]  1000.000 [get_ports {KEY[0]}]
 set_input_delay -add_delay  -clock [get_clocks {CLK_10K}]  1000.000 [get_ports {KEY[1]}]
-set_input_delay -add_delay  -clock { CLK_10K } 1000 [get_ports {KEY[0] KEY[1]}]
+
 
 #**************************************************************
 # Set Output Delay
@@ -121,7 +125,17 @@ set_output_delay -add_delay  -clock [get_clocks {CLK_10K}]  1000.000 [get_ports 
 set_output_delay -add_delay  -clock [get_clocks {CLK_10K}]  1000.000 [get_ports {HEX_7SEG[5][5]}]
 set_output_delay -add_delay  -clock [get_clocks {CLK_10K}]  1000.000 [get_ports {HEX_7SEG[5][6]}]
 set_output_delay -add_delay  -clock [get_clocks {CLK_10K}]  1000.000 [get_ports {HEX_7SEG[5][7]}]
-set_output_delay -clock { CLK_10K } 1000 [get_ports {LEDR[0] LEDR[1] LEDR[2] LEDR[3] LEDR[4] LEDR[5] LEDR[6] LEDR[7] LEDR[8] LEDR[9]}]
+set_output_delay -add_delay  -clock [get_clocks {CLK_10K}]  1000.000 [get_ports {LEDR[0]}]
+set_output_delay -add_delay  -clock [get_clocks {CLK_10K}]  1000.000 [get_ports {LEDR[1]}]
+set_output_delay -add_delay  -clock [get_clocks {CLK_10K}]  1000.000 [get_ports {LEDR[2]}]
+set_output_delay -add_delay  -clock [get_clocks {CLK_10K}]  1000.000 [get_ports {LEDR[3]}]
+set_output_delay -add_delay  -clock [get_clocks {CLK_10K}]  1000.000 [get_ports {LEDR[4]}]
+set_output_delay -add_delay  -clock [get_clocks {CLK_10K}]  1000.000 [get_ports {LEDR[5]}]
+set_output_delay -add_delay  -clock [get_clocks {CLK_10K}]  1000.000 [get_ports {LEDR[6]}]
+set_output_delay -add_delay  -clock [get_clocks {CLK_10K}]  1000.000 [get_ports {LEDR[7]}]
+set_output_delay -add_delay  -clock [get_clocks {CLK_10K}]  1000.000 [get_ports {LEDR[8]}]
+set_output_delay -add_delay  -clock [get_clocks {CLK_10K}]  1000.000 [get_ports {LEDR[9]}]
+
 
 #**************************************************************
 # Set Clock Groups

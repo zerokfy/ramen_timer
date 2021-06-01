@@ -19,7 +19,6 @@ module timer_top (
   logic   [ 7:0]      counter_1s;
     
 
-  //  60���Ԉȏ㐔�������G���[�Ƃ���LED���_��������
   assign  LEDR[0]   = carry_out[5];
   assign  LEDR[8:1] = 'h0;
   assign  LEDR[9]   = timeup;
@@ -33,7 +32,7 @@ module timer_top (
 	);
 
   //  reset controll
-  assign  pon_rst   = locked;
+  assign  pon_rst   = ~locked;
 
   always_ff @(posedge clk_10K)
     if(pon_rst)
@@ -53,16 +52,15 @@ module timer_top (
 
   assign  timeup = counter_1s == 'd180;
 
-  //  �b��2���\���ɕϊ�
   assign  carry_in[0] = countup_rdy;
   generate
     genvar i;
-    //  59:59:59 �܂ł̃J�E���^�ɂ���
+    //  until 59:59:59
     for(i=0; i<6; i++)  begin : disp_7seg
       if(i%2)
         digit_decoder #(
             .DIGIT_LIMIT    ( 5 )
-        ) sec_digit_decoder (
+        ) u_digit_decoder (
             .clk            ( clk_10K )
           , .rst            ( pon_rst )
 
@@ -73,7 +71,7 @@ module timer_top (
       else
         digit_decoder #(
             .DIGIT_LIMIT    ( 9 )
-        ) sec_digit_decoder (
+        ) u_digit_decoder (
             .clk            ( clk_10K )
           , .rst            ( pon_rst )
 

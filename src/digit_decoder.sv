@@ -1,4 +1,3 @@
-//  carry_in_rdy �̎��̃T�C�N���œ��J�E���^���X�V��7seg�ɕ\������
 module digit_decoder #(
     parameter           DIGIT_LIMIT = 9
 ) (
@@ -22,10 +21,9 @@ module digit_decoder #(
       else
         digit <=  digit + 'd1;
 
-  assign  carry_out_rdy  = digit[0] == DIGIT_LIMIT;
+  assign  carry_out_rdy  = digit == DIGIT_LIMIT;
 
 
-  //  7seg�\���Ƀf�R�[�h
   always_comb
     case(digit)
       'h0       : hex_display = 'b1111_1100;
