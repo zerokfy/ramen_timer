@@ -9,13 +9,13 @@ module sim_top;
 
   import  uvm_pkg::*;
 
+  `include "sample_model.svh"
+  `include "sample_test.sv"
+
   logic             CLK_50M;
   logic   [1:0]     KEY;
   logic   [7:0]     HEX_7SEG  [5:0];
   logic   [9:0]     LEDR;
-
-
-  `include "sample_test.sv"
 
 
   timer_top dut (
