@@ -2,7 +2,8 @@ class sample_env extends uvm_env;
 
   `uvm_component_utils(sample_env)
 
-  sample_agent agent;
+  sample_master_agent master;
+  sample_slave_agent  slave;
 
   function new (string name, uvm_component parent);
     super.new(name, parent);
@@ -10,7 +11,8 @@ class sample_env extends uvm_env;
 
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    agent = sample_agent::type_id::create("agent", this);
+    master = sample_master_agent::type_id::create("master", this);
+    slave  = sample_slave_agent::type_id::create("slave", this);
   endfunction
 
   task run_phase(uvm_phase phase);

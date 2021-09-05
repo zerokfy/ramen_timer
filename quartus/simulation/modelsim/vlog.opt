@@ -1,4 +1,4 @@
-+incdir+C:/intelFPGA_lite/20.1/modelsim_ase/verilog_src/uvm-1.2/src
++incdir+D:/intelFPGA_lite/20.1/modelsim_ase/verilog_src/uvm-1.2/src
 +incdir+C:/work/design/ramen_timer/sim/model
 +define+UVM_HDL_NO_DPI
 +define+UVM_NO_DPI

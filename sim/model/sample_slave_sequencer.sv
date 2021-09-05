@@ -1,6 +1,6 @@
-class sample_sequencer extends uvm_sequencer;
+class sample_slave_sequencer extends uvm_sequencer #(sample_seq_item);
 
-  `uvm_component_utils(sample_sequencer)
+  `uvm_component_utils(sample_slave_sequencer);
 
   function new (string name, uvm_component parent);
     super.new(name, parent);
