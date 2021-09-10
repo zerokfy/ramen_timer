@@ -31,3 +31,7 @@ phaseはfunctionで定義されるが、run_phaseのみ時刻を扱うのでtask
 # extract_phase
 # check_phase
 # report_phase
+
+* static な method には "::" でアクセスする
+uvm_config_db#(uvm_object_wrapper)::set(this,"example", "example_seq", value);
+

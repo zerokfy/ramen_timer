@@ -8,7 +8,7 @@ class sample_master_sequencer extends uvm_sequencer #(sample_seq_item);
 
   task run_phase(uvm_phase phase);
     uvm_report_info("SEQR", "Hi");
-    super.run_phase(phase);
+    //super.run_phase(phase);
   endtask
 
 endclass
