@@ -21,6 +21,7 @@ class normal_response_seq extends sample_slave_base_seq;
       `uvm_create(req)
       req.wait_cycle <= 1'b1;
       `uvm_send(req)
+      get_response(rsp);
     end
   endtask
 

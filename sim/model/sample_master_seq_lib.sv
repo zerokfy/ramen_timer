@@ -58,7 +58,7 @@ class write_seq extends sample_master_base_seq;
     uvm_report_info("SEQ_LIB", "Send Data");
     `uvm_send(req)
 
-    #1000;
+    #100;
 
     `uvm_create(req)
     uvm_report_info("SEQ_LIB", "Created REQ");
@@ -67,7 +67,7 @@ class write_seq extends sample_master_base_seq;
     `uvm_send(req)
 
     uvm_report_info("SEQ", $sformatf("read data is %02xh", req.rdata));
-    #1000;
+    #100;
   endtask
 
 endclass
