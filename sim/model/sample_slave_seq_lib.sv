@@ -27,3 +27,22 @@ class normal_response_seq extends sample_slave_base_seq;
 
 endclass
 
+class random_response_seq extends sample_slave_base_seq;
+
+  `uvm_object_utils(random_response_seq)
+
+  function new(string name="random_response_seq");
+    super.new(name);
+  endfunction
+
+  virtual task body();
+    forever begin
+      `uvm_create(req)
+      req.wait_cycle  <= $urandom_range(8, 0);
+      `uvm_send(req)
+      get_response(rsp);
+    end
+  endtask
+
+endclass
+

@@ -38,3 +38,5 @@ uvm_config_db#(uvm_object_wrapper)::set(this,"example", "example_seq", value);
 * UVM_ERROR取るのに大変助けになったページ
 https://www.chipverify.com/content/uvm/page-11
 
+* systemverilog の this とはなにか
+https://www.chipverify.com/systemverilog/systemverilog-this-keyword
