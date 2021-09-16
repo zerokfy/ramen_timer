@@ -40,3 +40,7 @@ https://www.chipverify.com/content/uvm/page-11
 
 * systemverilog の this とはなにか
 https://www.chipverify.com/systemverilog/systemverilog-this-keyword
+
+* どのシーケンスを使うかはuvm_testクラスのbuild_phaseで決定する
+* UVM_config_dbで登録したシーケンスを使える
+登録とは具体的になにかはまだ知らない

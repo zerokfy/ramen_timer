@@ -48,6 +48,7 @@ class write_seq extends sample_master_base_seq;
   endfunction
 
   virtual task body();
+
     uvm_report_info("SEQ_LIB", "Body Start");
 
     `uvm_create(req)
