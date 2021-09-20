@@ -1,6 +1,7 @@
 `include "model/sample_seq_item.sv"
 `include "model/sample_master_seq_lib.sv"
 `include "model/sample_slave_seq_lib.sv"
+`include "model/sample_scrbd_item.sv"
 `include "model/sample_master_driver.sv"
 `include "model/sample_slave_driver.sv"
 `include "model/sample_master_monitor.sv"
@@ -9,3 +10,6 @@
 `include "model/sample_master_agent.sv"
 `include "model/sample_slave_agent.sv"
 `include "model/sample_env.sv"
+
+`include "tb/gp_scoreboard.sv"
+`include "tb/tb_env.sv"

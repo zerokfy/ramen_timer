@@ -2,9 +2,38 @@ class sample_test extends uvm_test;
 
   `uvm_component_utils(sample_test)
 
-  sample_env env;
+  tb_env     tb;
 
   function new (string name="sample_test", uvm_component parent=null);
+    super.new(name, parent);
+  endfunction
+
+  function void build_phase(uvm_phase phase);
+    super.build_phase(phase);
+    uvm_config_db#(uvm_object_wrapper)::set(this,
+      "tb.sample_model.master.sequencer.run_phase", "default_sequence",
+      write_read_seq::type_id::get());
+    uvm_config_db#(uvm_object_wrapper)::set(this,
+      "tb.sample_model.slave.sequencer.run_phase", "default_sequence",
+      normal_response_seq::type_id::get());
+    tb  = tb_env::type_id::create("tb", this);
+  endfunction
+
+  task run_phase(uvm_phase phase);
+    uvm_report_info("TEST", "Hello World");
+    uvm_top.print_topology();
+  endtask
+
+endclass
+
+
+class sample_test_notb extends uvm_test;
+
+  `uvm_component_utils(sample_test_notb)
+
+  sample_env env;
+
+  function new (string name="sample_test_notb", uvm_component parent=null);
     super.new(name, parent);
   endfunction
 

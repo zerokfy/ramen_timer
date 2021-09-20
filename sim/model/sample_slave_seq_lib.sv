@@ -39,6 +39,7 @@ class random_response_seq extends sample_slave_base_seq;
     forever begin
       `uvm_create(req)
       req.wait_cycle  <= $urandom_range(8, 0);
+      //req.wait_cycle  <= 'h2;
       `uvm_send(req)
       get_response(rsp);
     end

@@ -1,13 +1,4 @@
-﻿* 階層構造
-このリポジトリでは、下記のような階層構造を作っている。
-
-+ uvm_env
-+-- uvm_agent
-+---- uvm_driver
-+---- uvm_sequencer
-+---- uvm_monitor
-
-* UVMメソドロジークラス
+﻿* UVMメソドロジークラス
 代表的なものは下記。
 メソドロジークラスはメソッドを必要とする。
 メソッドは各phaseで実行制御される。
@@ -44,3 +35,5 @@ https://www.chipverify.com/systemverilog/systemverilog-this-keyword
 * どのシーケンスを使うかはuvm_testクラスのbuild_phaseで決定する
 * UVM_config_dbで登録したシーケンスを使える
 登録とは具体的になにかはまだ知らない
+
+* UVM環境はコンパイルする順番があるのでincludeする順番を間違えないように

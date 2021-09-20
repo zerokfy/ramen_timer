@@ -4,12 +4,12 @@
 `include "uvm_pkg.sv"
 `include "uvm_macros.svh"
 
-`include "model/sample_if.sv"
 
 module sim_top;
 
   import  uvm_pkg::*;
 
+  `include "model/sample_if.sv"
   `include "model/sample_model.svh"
   `include "model/sample_test.sv"
 
@@ -36,8 +36,8 @@ module sim_top;
 
   initial begin
     uvm_config_db #(virtual sample_if)::set(
-        uvm_root::get(),
-        "*.env.*"
+        uvm_root::get()
+      , "*"
       , "vif"
       , vif);
     run_test();
