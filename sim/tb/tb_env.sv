@@ -14,6 +14,10 @@ class tb_env extends uvm_env;
 
     sample_model = sample_env::type_id::create("sample_model", this);
     sample_scrbd = gp_scoreboard#(sample_scrbd_item)::type_id::create("sample_scrbd", this);
+
+    //sample_master_monitor::type_id::set_type_override(sample_master_chg_monitor::get_type());
+    sample_master_monitor::type_id::set_inst_override(sample_master_chg_monitor::get_type(),
+      "uvm_test_top.tb.sample_model.master.monitor");
   endfunction
 
   function void connect_phase(uvm_phase phase);

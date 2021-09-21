@@ -12,4 +12,5 @@
 `include "model/sample_env.sv"
 
 `include "tb/gp_scoreboard.sv"
+`include "tb/sample_master_chg_monitor.sv"
 `include "tb/tb_env.sv"
