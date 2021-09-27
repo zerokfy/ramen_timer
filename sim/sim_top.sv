@@ -4,7 +4,6 @@
 `include "uvm_pkg.sv"
 `include "uvm_macros.svh"
 
-
 module sim_top;
 
   import  uvm_pkg::*;
@@ -19,33 +18,36 @@ module sim_top;
   logic   [7:0]     HEX_7SEG  [5:0];
   logic   [9:0]     LEDR;
 
-  sample_if         vif(CLK_50M, RST);
+  system_if         sys_if();
+  sample_if         vif();
+  timer_if          tif();
 
 
   initial begin : gen_clk
-    CLK_50M <= 1'b1;
+    sys_if.CLK_50M <= 1'b1;
     #100;
-    forever #20 CLK_50M = ~CLK_50M;
+    forever #20 sys_if.CLK_50M = ~sys_if.CLK_50M;
   end
 
   initial begin
-    RST <= 1'b0;
+    sys_if.RST <= 1'b1;
     #80
-    RST <= 1'b1;
+    sys_if.RST <= 1'b0;
   end
 
   initial begin
-    uvm_config_db #(virtual sample_if)::set(
-        uvm_root::get()
-      , "*"
-      , "vif"
-      , vif);
+    uvm_config_db #(virtual system_if)::set(uvm_root::get(), "*", "sys_if", sys_if);
+    uvm_config_db #(virtual sample_if)::set(uvm_root::get(), "*", "vif",    vif);
+    uvm_config_db #(virtual timer_if)::set( uvm_root::get(), "*", "tif",    tif);
     run_test();
   end
 
-  //timer_top dut (
-  //  .*
-  //);
+  timer_top dut (
+      .CLK_50M    ( sys_if.CLK_50M  )
+    , .KEY        ( tif.KEY         )
+    , .HEX_7SEG   ( tif.HEX_7SEG    )
+    , .LEDR       ( tif.LEDR        )
+  );
 
 endmodule
 

@@ -1,5 +1,6 @@
 class sample_slave_driver extends uvm_driver #(sample_seq_item);
 
+  virtual system_if   sys_if;
   virtual sample_if   vif;
 
   logic [7:0]   memory[bit [7:0]];
@@ -14,6 +15,9 @@ class sample_slave_driver extends uvm_driver #(sample_seq_item);
   function void build_phase(uvm_phase phase);
     bit status;
     super.build_phase(phase);
+    status = uvm_config_db#(virtual system_if)::get(this, "", "sys_if", sys_if);
+    if(status == 1'b0)
+      uvm_report_fatal("NOVIF", {"virtual interface must be set for: ", get_full_name(), ".sys_if"});
     status = uvm_config_db#(virtual sample_if)::get(this, "", "vif", vif);
     if(status == 1'b0)
       uvm_report_fatal("NOVIF", {"virtual interface must be set for: ", get_full_name(), ".vif"});
@@ -24,12 +28,12 @@ class sample_slave_driver extends uvm_driver #(sample_seq_item);
     logic [7:0]   rdata;
     uvm_report_info("DRIVER", "Hi");
     vif.valid   <= 1'b0;
-    @(posedge vif.RST);
+    @(posedge sys_if.RST);
 
     forever begin
       seq_item_port.get_next_item(req);
-      @(posedge vif.CLK_50M);
-      repeat(req.wait_cycle) @(posedge vif.CLK_50M);
+      @(posedge sys_if.CLK_50M);
+      repeat(req.wait_cycle) @(posedge sys_if.CLK_50M);
       vif.ready   <= 1'b1;
 
       if(vif.write === 1'b1) begin
@@ -38,7 +42,7 @@ class sample_slave_driver extends uvm_driver #(sample_seq_item);
         vif.rdata <= mem_read(vif.addr);
       end
 
-      @(posedge vif.CLK_50M)
+      @(posedge sys_if.CLK_50M)
       vif.ready   <= 1'b0;
       seq_item_port.item_done(req);
     end

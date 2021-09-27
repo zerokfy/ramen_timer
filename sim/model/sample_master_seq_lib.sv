@@ -110,3 +110,21 @@ class write_read_seq extends sample_master_base_seq;
 
 endclass
 
+class timer_seq extends sample_master_base_seq;
+
+  `uvm_object_utils(timer_seq)
+
+  function new(string name="timer_seq");
+    super.new(name);
+  endfunction
+
+  virtual task body();
+    repeat(2)
+      @(posedge sys_if.CLK_50M);
+    tif.KEY <= 'h1;
+
+    repeat(10)
+      @(posedge sys_if.CLK_50M);
+  endtask
+
+endclass
