@@ -4,19 +4,15 @@
 `include "uvm_pkg.sv"
 `include "uvm_macros.svh"
 
+`include "model/sample_if.sv"
+
 module sim_top;
 
   import  uvm_pkg::*;
 
-  `include "model/sample_if.sv"
   `include "model/sample_model.svh"
   `include "model/sample_test.sv"
 
-  logic             CLK_50M;
-  logic             RST;
-  logic   [1:0]     KEY;
-  logic   [7:0]     HEX_7SEG  [5:0];
-  logic   [9:0]     LEDR;
 
   system_if         sys_if();
   sample_if         vif();
@@ -36,9 +32,6 @@ module sim_top;
   end
 
   initial begin
-    uvm_config_db #(virtual system_if)::set(uvm_root::get(), "*", "sys_if", sys_if);
-    uvm_config_db #(virtual sample_if)::set(uvm_root::get(), "*", "vif",    vif);
-    uvm_config_db #(virtual timer_if)::set( uvm_root::get(), "*", "tif",    tif);
     run_test();
   end
 

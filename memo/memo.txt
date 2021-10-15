@@ -37,3 +37,5 @@ https://www.chipverify.com/systemverilog/systemverilog-this-keyword
 登録とは具体的になにかはまだ知らない
 
 * UVM環境はコンパイルする順番があるのでincludeする順番を間違えないように
+
+* taskの中ではオブジェクトハンドルを作れない、class直下でclassのインスタンス(ハンドル)を作る

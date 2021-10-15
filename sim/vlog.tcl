@@ -7,5 +7,6 @@ vlog \
   +define+UVM_NO_DPI \
   +define+UVM_CMDLINE_NO_DPI \
   +define+UVM_REGEX_NO_DPI \
+  -f C:/work/design/ramen_timer/sim/list.f \
   C:/work/design/ramen_timer/sim/sim_top.sv
 

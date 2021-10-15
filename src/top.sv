@@ -6,17 +6,21 @@ module timer_top (
   , output  logic   [9:0]     LEDR
 );
 
-  logic               clk_10K;
-  logic               rst_ext_n;
+  parameter   CLK_FREQ_KHZ      = 50 * 1000;
+
+  //  zero-origin
+  localparam  SEC_COUNTER_LIMIT = CLK_FREQ_KHZ * 1000 - 1;
+
   logic               locked;
   logic               pon_rst;
   logic   [ 7:0]      hex_display   [5:0];
   logic               countup_rdy;
-  logic   [13:0]      clk_counter;
   logic   [ 5:0]      carry_in;
   logic   [ 5:0]      carry_out;
   logic               timeup;
-  logic   [ 7:0]      counter_1s;
+  logic               before_1s;
+
+  logic   [ $clog2(SEC_COUNTER_LIMIT)-1:0]  counter_1s;
     
 
   assign  LEDR[0]   = carry_out[5];
@@ -25,34 +29,30 @@ module timer_top (
   assign  HEX_7SEG  = hex_display;
 
 
-  ATLPLL	ALTPLL_inst (
-	    .inclk0   ( CLK_50M     )
-	  , .c0       ( clk_10K     )
-	  , .locked   ( locked      )
-	);
+  //  future use
+  ATLPLL ALTPLL_inst (
+      .inclk0   ( CLK_50M     )
+    , .c0       (             )
+    , .locked   ( locked      )
+  );
 
   //  reset controll
   assign  pon_rst   = ~locked;
 
-  always_ff @(posedge clk_10K)
-    if(pon_rst)
-      clk_counter <=  'd0;
-    else if(countup_rdy)
-      clk_counter <=  'd0;
-    else
-      clk_counter <=  clk_counter + 'd1;
-
-  assign  countup_rdy = clk_counter == 'd9999;
-
-  always_ff @(posedge clk_10K)
+  //  0s to 1s counter each 20ns
+  always_ff @(posedge CLK_50M)
     if(pon_rst)
       counter_1s  <=  'd0;
-    else if(countup_rdy)
+    else if(before_1s)
+      counter_1s  <=  'd0;
+    else
       counter_1s  <=  counter_1s + 'd1;
 
-  assign  timeup = counter_1s == 'd180;
+  assign  before_1s = counter_1s == SEC_COUNTER_LIMIT;
 
-  assign  carry_in[0] = countup_rdy;
+
+  //  7-segment decorder
+  assign  carry_in[0] = 'b1;
   generate
     genvar i;
     //  until 59:59:59
@@ -61,23 +61,25 @@ module timer_top (
         digit_decoder #(
             .DIGIT_LIMIT    ( 5 )
         ) u_digit_decoder (
-            .clk            ( clk_10K )
+            .clk            ( CLK_50M )
           , .rst            ( pon_rst )
 
+          , .countup_rdy    ( before_1s   )
           , .carry_in_rdy   ( carry_in[i] )
-          , .hex_display    ( hex_display[i] )
           , .carry_out_rdy  ( carry_out[i] )
+          , .hex_display    ( hex_display[i] )
         );
       else
         digit_decoder #(
             .DIGIT_LIMIT    ( 9 )
         ) u_digit_decoder (
-            .clk            ( clk_10K )
+            .clk            ( CLK_50M )
           , .rst            ( pon_rst )
 
+          , .countup_rdy    ( before_1s   )
           , .carry_in_rdy   ( carry_in[i] )
-          , .hex_display    ( hex_display[i] )
           , .carry_out_rdy  ( carry_out[i] )
+          , .hex_display    ( hex_display[i] )
         );
     end
   endgenerate

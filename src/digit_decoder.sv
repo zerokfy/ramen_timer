@@ -1,12 +1,13 @@
 module digit_decoder #(
     parameter           DIGIT_LIMIT = 9
 ) (
-    input  logic             clk
-  , input  logic             rst
+    input   logic             clk
+  , input   logic             rst
 
-  , input  logic             carry_in_rdy
-  , output logic   [7:0]     hex_display
-  , output logic             carry_out_rdy
+  , input   logic             countup_rdy
+  , input   logic             carry_in_rdy
+  , output  logic   [7:0]     hex_display
+  , output  logic             carry_out_rdy
 );
 
   logic   [ 3:0]      digit;
@@ -16,7 +17,7 @@ module digit_decoder #(
     if(rst)
       digit <=  'd0;
     else if(carry_in_rdy)
-      if(carry_out_rdy)
+      if(countup_rdy)
         digit <=  'd0;
       else
         digit <=  digit + 'd1;

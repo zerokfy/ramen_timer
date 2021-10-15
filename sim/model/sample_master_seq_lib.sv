@@ -6,33 +6,11 @@ virtual class sample_master_base_seq extends uvm_sequence #(sample_seq_item);
   endfunction
 
   virtual task pre_body();
-
-    uvm_phase starting_phase = get_starting_phase();
-
     uvm_report_info("SEQ_LIB", "PreBody Start");
-
-    if(starting_phase != null) begin
-      `uvm_info(get_type_name(),
-                $sformatf("%s pre_body() raising %s objection",
-                         get_sequence_path(),
-                         starting_phase.get_name()), UVM_MEDIUM);
-
-      starting_phase.raise_objection(this, get_type_name());
-    end
   endtask
 
   virtual task post_body();
-
-    uvm_phase starting_phase = get_starting_phase();
-
     uvm_report_info("SEQ_LIB", "PostBody Start");
-    if(starting_phase != null) begin
-      `uvm_info(get_type_name(),
-                $sformatf("%s post_body() dropping %s objection",
-                          get_sequence_path(),
-                          starting_phase.get_name()), UVM_MEDIUM);
-      starting_phase.drop_objection(this, get_type_name());
-    end
   endtask
 endclass
 
@@ -111,6 +89,9 @@ class write_read_seq extends sample_master_base_seq;
 endclass
 
 class timer_seq extends sample_master_base_seq;
+
+  virtual system_if   sys_if;
+  virtual timer_if    tif;
 
   `uvm_object_utils(timer_seq)
 

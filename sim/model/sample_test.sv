@@ -32,6 +32,8 @@ class timer_test extends uvm_test;
   `uvm_component_utils(timer_test)
 
   sample_env env;
+  timer_seq  seq_hd;
+  sample_master_sequencer   seqer_hd;
 
   function new (string name="timer_test", uvm_component parent=null);
     super.new(name, parent);
@@ -39,18 +41,21 @@ class timer_test extends uvm_test;
 
   function void build_phase(uvm_phase phase);
     super.build_phase(phase);
-    uvm_config_db#(uvm_object_wrapper)::set(this,
-      "env.master.sequencer.run_phase", "default_sequence",
-      timer_seq::type_id::get());
-    uvm_config_db#(uvm_object_wrapper)::set(this,
-      "env.slave.sequencer.run_phase", "default_sequence",
-      normal_response_seq::type_id::get());
     env = sample_env::type_id::create("env", this);
   endfunction
 
+
   task run_phase(uvm_phase phase);
+
     uvm_report_info("TEST", "Hello World");
+    seq_hd    = timer_seq::type_id::create("seq_hd");
+
     uvm_top.print_topology();
+
+    phase.raise_objection(this);
+    seq_hd.start(seqer_hd);
+    phase.drop_objection(this);
+
   endtask
 
 endclass
