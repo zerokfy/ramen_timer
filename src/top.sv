@@ -7,6 +7,7 @@ module timer_top (
 );
 
   parameter   CLK_FREQ_KHZ      = 50 * 1000;
+  parameter   TIME_LIMIT_S      = 150;
 
   //  zero-origin
   localparam  SEC_COUNTER_LIMIT = CLK_FREQ_KHZ * 1000 - 1;
@@ -17,9 +18,10 @@ module timer_top (
   logic               countup_rdy;
   logic   [ 5:0]      carry_in;
   logic   [ 5:0]      carry_out;
-  logic               timeup;
   logic               before_1s;
+  logic               timeup;
 
+  logic   [ $clog2(TIME_LIMIT_S)-1:0]       time_lim_cnt;
   logic   [ $clog2(SEC_COUNTER_LIMIT)-1:0]  counter_1s;
     
 
@@ -49,6 +51,17 @@ module timer_top (
       counter_1s  <=  counter_1s + 'd1;
 
   assign  before_1s = counter_1s == SEC_COUNTER_LIMIT;
+
+  //  measure time_lim_cnt
+  always_ff @(posedge CLK_50M)
+    if(pon_rst)
+      time_lim_cnt  <=  'b0;
+    else if(time_lim_cnt == TIME_LIMIT_S)
+      time_lim_cnt  <=  time_lim_cnt;
+    else if(before_1s)
+      time_lim_cnt  <=  time_lim_cnt + 'b1;
+
+  assign  timeup  = time_lim_cnt == TIME_LIMIT_S;
 
 
   //  7-segment decorder

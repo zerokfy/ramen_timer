@@ -12,12 +12,6 @@ class sample_master_driver extends uvm_driver #(sample_seq_item);
   function void build_phase(uvm_phase phase);
     bit status;
     super.build_phase(phase);
-    status = uvm_config_db#(virtual system_if)::get(this, "", "sys_if", sys_if);
-    if(status == 1'b0)
-      uvm_report_fatal("NOVIF", {"virtual interface must be set for: ", get_full_name(), ".sys_if"});
-    status = uvm_config_db#(virtual timer_if)::get(this, "", "tif", tif);
-    if(status == 1'b0)
-      uvm_report_fatal("NOVIF", {"virtual interface must be set for: ", get_full_name(), ".tif"});
   endfunction
 
   task run_phase(uvm_phase phase);

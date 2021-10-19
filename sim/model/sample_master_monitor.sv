@@ -16,9 +16,6 @@ class sample_master_monitor extends uvm_monitor;
   function void build_phase(uvm_phase phase);
     bit status;
     super.build_phase(phase);
-    status = uvm_config_db#(virtual sample_if)::get(this, "", "vif", vif);
-    if(status == 1'b0)
-      uvm_report_fatal("NOVIF", {"virtual interface must be set for: ", get_full_name(), ".vif"});
   endfunction
 
   task run_phase(uvm_phase phase);

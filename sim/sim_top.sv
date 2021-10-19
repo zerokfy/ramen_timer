@@ -32,6 +32,9 @@ module sim_top;
   end
 
   initial begin
+    uvm_config_db#(virtual sample_if)::set(null, "*", "vif",    vif);
+    uvm_config_db#(virtual system_if)::set(null, "*", "sys_if", sys_if);
+    //uvm_config_db#(virtual timer_if )::set(null, "*", "tif",    tif);
     run_test();
   end
 
